@@ -1,0 +1,26 @@
+<h2>KFC's Kitchen</h2>
+
+<form method="GET" action="">
+    <input type="text" name="search" placeholder="Search..." value="{{ search_val }}">
+
+    <select name="category">
+        <option value="All">All Categories</option>
+        <option value="Dessert" {% if category_val == "Dessert" %}selected{% endif %}>Dessert</option>
+        <option value="Main" {% if category_val == "Main" %}selected{% endif %}>Main Course</option>
+    </select>
+
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% for item in items %}
+<div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 10px; border-radius: 5px;">
+    <h3>{{ item.name }}</h3>
+    <p>Category: {{ item.category }}</p>
+    <p>Price: {{ item.price }}</p>
+    <p>Available: {% if item.available %}✅{% else %}❌{% endif %}</p>
+</div>
+{% empty %}
+<p>No items found.</p>
+{% endfor %}
