@@ -1,0 +1,50 @@
+<form method="GET" action="{% url 'course_search' %}">
+    <label for="course_select">Select a Course:</label>
+    
+    <select name="q" id="course_select">
+        <option value="">-- Choose a course --</option>
+        {% for c in all_courses %}
+            <option value="{{ c.name }}" {% if c.name == selected_query %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+        {% endfor %}
+    </select>
+    
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% if course %}
+    <h2>Results for: {{ course.name }}</h2>
+    
+    {% if course.image %}
+        <img src="{{ course.image.url }}" alt="{{ course.name }}" style="width: 200px; display: block; margin-bottom: 15px;">
+    {% endif %}
+
+    <h3>Instructors:</h3>
+    <ul>
+        {% for instructor in course.instructors.all %}
+            <li>
+                {% if instructor.photo %}
+                    <img src="{{ instructor.photo.url }}" alt="{{ instructor.name }}" style="width: 50px; height: 50px; border-radius: 50%; vertical-align: middle;">
+                {% endif %}
+                {{ instructor.name }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Students:</h3>
+    <ul>
+        {% for student in course.students.all %}
+            <li>
+                {% if student.photo %}
+                    <img src="{{ student.photo.url }}" alt="{{ student.name }}" style="width: 50px; height: 50px; border-radius: 50%; vertical-align: middle;">
+                {% endif %}
+                {{ student.name }}
+            </li>
+        {% endfor %}
+    </ul>
+{% elif selected_query %}
+    <p>No course found with that name.</p>
+{% endif %}
