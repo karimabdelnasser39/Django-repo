@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Find a Course</h1>
+
+<form method="GET">
+    <select name="q" onchange="this.form.submit()">
+        <option value="">-- Choose Course --</option>
+        {% for c in all_courses %}
+            <option value="{{ c.name }}" {% if c.name == selected_query %}selected{% endif %}>
+                {{ c.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <button type="submit">Search</button>
+</form>
+
+<hr>
+
+{% if course %}
+    <div class="result-card">
+        <h2>Course: {{ course.name }}</h2>
+        
+        {% if course.image %}
+            <img src="{{ course.image.url }}" alt="{{ course.name }}" class="course-banner">
+        {% endif %}
+
+        <h3>Instructors</h3>
+        {% for instructor in course.instructors.all %}
+            <div class="student-item">
+                {% if instructor.photo %}
+                    <img src="{{ instructor.photo.url }}" class="profile-pic" width="60" height="60">
+                {% endif %}
+                <strong>{{ instructor.name }}</strong>
+            </div>
+        {% endfor %}
+
+        <h3>Students Enrolled</h3>
+        {% for student in course.students.all %}
+            <div class="student-item">
+                {% if student.photo %}
+                    <img src="{{ student.photo.url }}" class="profile-pic" width="45" height="45">
+                {% endif %}
+                <span>{{ student.name }}</span>
+            </div>
+        {% endfor %}
+    </div>
+{% elif selected_query %}
+    <p>No results found for "{{ selected_query }}".</p>
+{% endif %}
+{% endblock %}
